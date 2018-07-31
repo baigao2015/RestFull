@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>restfull</title>
+
+    <link rel="shortcut icon" href="favicon.ico"> <link href="css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+    <link href="css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+
+    <link href="css/animate.min.css" rel="stylesheet">
+    <link href="css/style.min.css?v=4.0.0" rel="stylesheet">
+    <link rel="stylesheet" href="plugins/jsonFormater-master/jsonFormater.css" />
+    <base target="_blank">
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                	<div class="ibox-title">
+			            <h5>RestFull</h5>
+                    </div>
+                    <div class="ibox-content">
+                    	<div class="input-group col-sm-12">
+	                    	<div class="col-sm-10">
+		                    	<div class="input-group m-b">
+		                            <div class="input-group-btn" style="width: 90px;">
+		                            	<select class="form-control m-b" name="account" style="margin-top: -5px;" id="method">
+		                                </select>
+		                            </div>
+		                            <input type="text" class="form-control" placeholder="请输入请求地址" id="url-input">
+		                            <div class="input-group-btn">
+		                            	<button class="btn btn-white" type="button" id="params-btn" name="params">Params</button>
+		                            </div>
+		                        </div>
+	                       </div>
+	                       <div class="col-sm-2">
+		                    	<div class="input-group m-b">
+		                            <div class="input-group-btn">
+		                            	<button class="btn btn-success" type="button" id="send_form_btn">Send</button>
+		                            	<button class="btn btn-warning" type="button" id="save_form_btn">Save</button>
+		                            </div>
+		                        </div>
+	                       </div>
+	                    </div>
+                       <!-- params start -->
+                       <div class="input-group col-sm-12 params_content" id="params_content" style="display: none;">
+	                    	<!--____________     ________________________ ☰ ✘-->
+	                    	<div class="row" id="params_row">
+		                        <div class="col-sm-4">
+		                        	<div class="m-b">
+			                        	<input type="text" id="params_row_key" placeholder="key" class="form-control" onfocus="createNextDivRowHtmlParams(this)">
+		                        
+		                        	</div>
+		                        </div>
+		                        <div class="col-sm-7">
+		                        	<div class="input-group m-b">
+			                            <input type="text" id="params_row_val" placeholder="value" class="form-control" onfocus="createNextDivRowHtmlParams(this)">
+			                        	<span class="input-group-addon" style="padding: 0px 1px 0 5px; border: none; font-size: 11px;" name="params" onclick="editParam2DivRows(this)">Builk Edit</span>
+		                        	</div>
+		                        </div>
+	                        </div>
+	                    </div><!-- params end -->
+	                    
+	                    <!-- 描述：参数textarea 域 start -->
+	                    <div class="input-group col-sm-12 params_content" id="params_content_params" style="display: none;">
+	                    	<div class="row form-group">
+		                        <div class="col-sm-12">
+		                        	<textarea id="top_params_key2val" class="form-control"></textarea>
+		                        </div>
+	                        </div>
+	                        <div class="form-group">
+	                            <div class="col-sm-8 col-sm-offset-3">
+	                            	<button class="btn btn-primary" type="button" name="params" onclick="setParams2Html(this)">提交</button>
+	                                <button class="btn btn-white" type="button" name="params" onclick="cancelParams(this)">取消</button>
+	                            </div>
+	                        </div>
+	                    </div> <!-- 描述：参数textarea 域 end -->
+                    
+                    
+                       <!-- tabs-container start -->
+                       <div class="tabs-container">
+		                    <ul class="nav nav-tabs">
+		                        <li class="active" name="authorization"><a data-toggle="tab" href="#tab-authorization" aria-expanded="true">Authorization</a></li>
+		                        <li class="" name="headers"><a data-toggle="tab" href="#tab-headers" aria-expanded="false">Headers</a></li>
+		                        <li class="" name="body"><a data-toggle="tab" href="#tab-body" aria-expanded="false">Body</a></li>
+		                    </ul>
+		                    <div class="tab-content">
+		                        <div id="tab-authorization" class="tab-pane active">
+		                            <div class="panel-body">
+		                            	==================
+		                            </div>
+		                        </div>
+		                        <div id="tab-headers" class="tab-pane">
+		                            <div class="panel-body">
+		                                <strong>移动设备优先</strong>
+		                            </div>
+		                        </div>
+		                        <div id="tab-body" class="tab-pane">
+		                            <div class="panel-body">
+		                                <strong>tab-body移动设备优先</strong>
+		                            </div>
+		                        </div>
+		                    </div>
+		                </div><!-- tabs-container end -->
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    
+                    <div class="ibox-content clear header_content" id="header_content">
+                                    
+                    	<!--✔____________     ________________________ ✘-->
+                    	<div class="row" id="header_row">
+	                        <div class="col-sm-4">
+	                        	<div class="input-group m-b">
+	                    			<span class="input-group-addon" style="padding: 0px 17px 0 1px; border: none;"> </span>
+		                        	<input type="text" id="header_row_key" placeholder="key" class="form-control" onfocus="createNextDivRowHtml(this)">
+		                        </div>
+	                        </div>
+	                        <div class="col-sm-8">
+	                        	<div class="input-group m-b">
+		                            <input type="text" id="header_row_val" placeholder="value" class="form-control" onfocus="createNextDivRowHtml(this)">
+		                        	<span class="input-group-addon" style="padding: 0px 1px 0 5px; border: none; font-size: 11px;" onclick="editParam2DivRows(this)">Builk Edit</span>
+	                        	</div>
+	                        </div>
+                        </div>
+                    </div>
+                    <div class="ibox-content" id="header_content_params" style="display: none;">
+                    	<div class="input-group col-sm-12">
+                    	<div class="row form-group" id="header_row_params">
+	                        <div class="col-sm-12">
+	                        	<textarea id="params_key2val" rows="5" name="comment" class="form-control"></textarea>
+	                        </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-8 col-sm-offset-3">
+                            	<button class="btn btn-primary" type="button" name="header" onclick="setParams2Html(this)">提交</button>
+                                <button class="btn btn-white" type="button" onclick="cancelParams(this)">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                
+                </div>
+            </div>
+            <!-- result body start  -->
+            <div class="col-sm-12">
+            	<div class="ibox float-e-margins">
+            		<div class="ibox-title">
+			            <h5>结果</h5>
+                    </div>
+            		<div class="ibox-content">
+                    	<div class="forum-title" id="builtfull-result-json">
+                        </div>
+                	</div>
+            	</div>
+            </div><!-- result body end  -->
+        </div>
+    </div>
+    
+    <script src="js/jquery.min.js?v=2.1.4"></script>
+    <script src="js/bootstrap.min.js?v=3.3.5"></script>
+    <!--<script src="js/plugins/layer/layer.min.js"></script>-->
+    <script src="js/content.min.js"></script>
+    <script src="plugins/jsl.format.js"></script>
+    <script src="plugins/jsonFormater-master/jsonFormater.js"></script>
+    <!--<script src="js/welcome.min.js"></script>-->
+    <script src="pagesjs/index_v1.js"></script>
+    <script>
+    	$(function() {
+			$('#send_form_btn').click(function() {
+				getDivParams2Json();
+			});
+			$('#save_form_btn').click(function() {
+	            formatJSON2HtmlInit('builtfull-result-json', $('#params_key2val').val(), null);
+			});
+		
+			$('#params-btn').click(function() {
+				
+				// 判断是否隐藏is(':hidden')； 是否显示.is(':visible')
+				if($('#params_content').is(':hidden')) {
+					$('#params_content').show();
+				} else {
+					$('#params_content').hide();
+				}
+			});
+			initSelectMethod();
+		});
+    </script>
+</body>
+
+</html>
