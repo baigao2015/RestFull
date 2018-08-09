@@ -32,12 +32,12 @@ function createNextDivRowHtmlParams(v) {
 		+'<div class="row" id="params_row_'+ rowIndex +'">'
         +'    <div class="col-sm-4">'
         +'		<div class="m-b">'
-        +'        	<input type="text" id="params_row_key_'+ rowIndex +'" placeholder="key" class="form-control" onkeyup="getDivParams(this)">'
+        +'        	<input type="text" id="params_row_key_'+ rowIndex +'" placeholder="key" class="form-control" onpropertychange="getDivParams(this)" oninput="getDivParams(this)">'
         +'      </div>'
         +'    </div>'
         +'    <div class="col-sm-7">'
         +'		<div class="input-group m-b">'
-        +'          <input type="text" id="params_row_val_'+ rowIndex +'" placeholder="value" class="form-control" onkeyup="getDivParams(this)">'
+        +'          <input type="text" id="params_row_val_'+ rowIndex +'" placeholder="value" class="form-control" onpropertychange="getDivParams(this)" oninput="getDivParams(this)">'
         +'			<span class="input-group-addon" style="border: none;" onclick="moveDivRowHtml(this)"><i class="fa fa-ellipsis-v"></i></span>' // 拖动上下顺序按钮
         +'			<span class="input-group-addon" style="padding: 0px 1px 0 5px; border: none;" onclick="removeDivRowHtml(this)"><i class="fa fa-close"></i></span>'
         +'       </div>'
@@ -48,6 +48,16 @@ function createNextDivRowHtmlParams(v) {
 		
 		inputId == 'params_row_val' ? $('#params_row_val_'+ rowIndex +'').focus() : $('#params_row_key_'+ rowIndex +'').focus();
 	}
+	
+	// 暂存params 参数
+	var urlParamsPrev = isEmpty($('#url-input').val()) ? "" : $('#url-input').val();
+	
+	if(urlParamsPrev.indexOf("?") > 0) {
+		urlParamsPrev = urlParamsPrev.substring(urlParamsPrev.indexOf("?") + 1, urlParamsPrev.length);
+		$('#url-input_params').val(urlParamsPrev);
+	} else {
+		$('#url-input_params').val('');
+	}
 }
 
 /**
@@ -55,54 +65,27 @@ function createNextDivRowHtmlParams(v) {
  * @param {Object} v
  */
 function getDivParams(v) {
-	
 	var dynamicParam = $(v).val();
 	var url = $('#url-input').val();
-	
-	console.warn(dynamicParam +'======'+url);
+
 	var paramsTemp = '';
 	var testRegExp = new RegExp('_row_key_');
 	var testRegExp2 = new RegExp('_row_val_');
-
-	$('#params_row div').each(function(index, val) {
-		
-		if(testRegExp.test($(v).attr('id'))) {
-			paramsTemp+= dynamicParam
-			
-		}
-
-		if(testRegExp2.test($(v).attr('id'))) {
-			var paramKey = $(v).parent().parent().prev().find('input').val();
-			if(paramKey) {
-				paramsTemp+= paramKey + '=' +dynamicParam
-			}
-		}
-		
-	});
 	
-	if(url.indexOf("?") > 0) {
-		var newUrl = url.substring(0,url.firstIndexOf("?")) + paramsTemp;
-		$('#url-input').val(url + "?"+ newUrl);
-	} else {
-		$('#url-input').val(url + "?"+ paramsTemp);
+	if(testRegExp.test($(v).attr('id'))) {
+		paramsTemp+=dynamicParam;
+	}
+
+	if(testRegExp2.test($(v).attr('id'))) {
+		var paramKey = $(v).parent().parent().prev().find('input').val();
+		if(paramKey) {
+			paramsTemp+= paramKey + '=' +dynamicParam;
+		}
 	}
 	
-//	
-//	if(testRegExp.test($(v).attr('id'))) {
-//		paramsTemp+= dynamicParam
-//		$('#url-input').val(url + "?"+ paramsTemp);
-//	}
-//	
-//	if(testRegExp2.test($(v).attr('id'))) {
-//		paramsTemp = '';
-//		// 获取val里对应的key
-//		var paramKey = $(v).parent().parent().prev().find('input').val();
-//		console.log(paramKey)
-//		if(paramKey) {
-//			paramsTemp+= dynamicParam
-//			$('#url-input').val(url + "="+ paramsTemp);
-//		}
-//	}
+	var paramsPrev = isEmpty($('#url-input_params').val()) ? "" : ($('#url-input_params').val() + "&");
+	$('#url-input').val('');
+	$('#url-input').val($('#url-input_temp').val() + "?"+ paramsPrev + paramsTemp);
 }
 
 /**
@@ -319,15 +302,6 @@ function formatJSON2HtmlInit(showDivId, jsonData, optionsFormat) {
 	jf.doFormat(jsonData);
 }
 
-/**  
- *是否为空  
- * @param v  {*} 值  
- * @param allowBlank {boolean} 是否允许空  
- * @returns {boolean|*}  
- */
-function isEmpty(v, allowBlank) {
-	return v === null || v === undefined || String(v).toUpperCase() === 'NULL' || ((isArray(v) && !v.length)) || (!allowBlank ? v === '' : false);
-}
 
 /**
  * 
@@ -364,86 +338,8 @@ function parseJson(jsonData) {
 				console.log(toKey+'=====直接取key  val======'+jsonData[toKey]);		
 			}
 		}
-//	});
+	}
 }
-	
-//	var setparamsInDiv = $(v).attr('name'); //设置在哪个模块里header/params/.....
-//	var testRegExp = new RegExp('params');
-//	
-//	var textVal = $("#params_key2val").val();
-//	
-//	var arrayVals = [];
-//		arrayVals = textVal.split('\n'); // 以换行未分隔符，将内容分割成数组
-//	
-//	var nextDivhtml = '';
-//	
-//	$.each(jsonData, function(index, val) {
-//		var indexNum = val.indexOf(':');
-//		var rowIndex = index;
-//		var rowKey = val.substr(0, indexNum), rowVal = val.substr(indexNum+1, val.length);
-//		
-//		if(!testRegExp.test(setparamsInDiv)) {
-//			nextDivhtml += ''
-//							+'<div class="row" id="'+ setparamsInDiv +'_row_'+ rowIndex +'">'
-//					        +'    <div class="col-sm-4">'
-//					        +'		<div class="input-group m-b">'
-//					        +'        	<input type="text" id="'+ setparamsInDiv +'_row_key_'+ rowIndex +'" placeholder="key" value="'+rowKey+'" class="form-control" onfocus="createNextDivRowHtml(this)">'
-//					        +'       </div>'
-//					        +'    </div>'
-//					        +'    <div class="col-sm-7">'
-//					        +'		<div class="input-group m-b">'
-//					        +'          <input type="text" id="'+ setparamsInDiv +'_row_val_'+ rowIndex +'" placeholder="value" class="form-control" value="'+rowVal+'" onfocus="createNextDivRowHtml(this)">'
-//					        +'			<span class="input-group-addon" style="border: none;" onclick="moveDivRowHtml(this)"><i class="fa fa-ellipsis-v"></i></span>' // 拖动上下顺序按钮
-//					        +'			<span class="input-group-addon" style="padding: 0px 1px 0 5px; border: none;" onclick="removeDivRowHtml(this)"><i class="fa fa-close"></i></span>'
-//					        +'       </div>'
-//					        +'   </div>'
-//					        +'</div>';
-//		} else {// header
-//			nextDivhtml += ''
-//							+'<div class="row" id="header_row_'+ rowIndex +'">'
-//					        +'    <div class="col-sm-4">'
-//					        +'		<div class="input-group m-b">'
-//					        +'			<span class="input-group-addon" style="padding: 0px 5px 0 1px; border: none;"><i class="fa fa-check-circle"></i></span>'
-//					        +'        	<input type="text" id="header_row_key_'+ rowIndex +'" placeholder="key" value="'+rowKey+'" class="form-control" onfocus="createNextDivRowHtml(this)">'
-//					        +'       </div>'
-//					        +'    </div>'
-//					        +'    <div class="col-sm-8">'
-//					        +'		<div class="input-group m-b">'
-//					        +'          <input type="text" id="header_row_val_'+ rowIndex +'" placeholder="value" class="form-control" value="'+rowVal+'" onfocus="createNextDivRowHtml(this)">'
-//					        +'			<span class="input-group-addon" style="padding: 0px 1px 0 5px; border: none;" onclick="removeDivRowHtml(this)"><i class="fa fa-close"></i></span>'
-//					        +'       </div>'
-//					        +'   </div>'
-//					        +'</div>';
-//		}
-//	});
-//	
-//	// 固定栏目
-//	var headerRow = '<div class="row" id="header_row">'
-//              +'    <div class="col-sm-4">'
-//              +'    	<div class="input-group m-b">'
-//              +'			<span class="input-group-addon" style="padding: 0px 17px 0 1px; border: none;"> </span>'
-//              +'        	<input type="text" id="header_row_key" placeholder="key" class="form-control" onfocus="createNextDivRowHtml(this)">'
-//              +'        </div>'
-//              +'    </div>'
-//              +'    <div class="col-sm-8">'
-//              +'    	<div class="input-group m-b">'
-//              +'            <input type="text" id="header_row_val" placeholder="value" class="form-control" onfocus="createNextDivRowHtml(this)">'
-//              +'        	<span class="input-group-addon" style="padding: 0px 1px 0 5px; border: none; font-size: 11px;" onclick="editParam2DivRows(this)">Builk Edit</span>'
-//              +'    	</div>'
-//              +'    </div>'
-//              +'</div>';
-//	
-//	if(testRegExp.test(setparamsInDiv)) {
-//		$('#'+ setparamsInDiv +'_content').html('').append(nextDivhtml).append(headerRow);
-//	    $('#'+ setparamsInDiv +'_content_params').hide();
-//	    $('#'+ setparamsInDiv +'_content').show();
-//	} else { // header
-//		$('#header_content').html('').append(nextDivhtml).append(headerRow);
-//	    $('#header_content_params').hide();
-//	    $('#header_content').show();
-//	}
-}
-
 /**
  * 初始化方法下拉框
  */
@@ -454,25 +350,37 @@ function initSelectMethod() {
 	});
 	$('#method').append(htmlTemp);
 }
-//
-//function keyInputOnkeUp(this) {
-//	var methodTmp = $('#method').val();
-//	 switch (methodTmp){
-//      case "GET":
-//      case "get":
-//          return $('#url-input').val() + 
-//      case "delete":
-//          url = "DELETE";
-//          break;
-//      case "put":
-//          method = "PUT";
-//          break;
-//      default :
-//          break;
-//  }
-//}
 
+function setIntervalTemp(v) {
+	var tempUrl = $(v).val();
+	if(tempUrl.indexOf("?") > 0) {
+		$('#url-input_temp').val(tempUrl.substring(0,url.firstIndexOf("?")));
+	} else {
+		$('#url-input_temp').val(tempUrl);
+	}
+}
+
+/**
+ * 获取URL中参数的值
+ * @param {Object} name
+ * @param {Object} urlParam 可传可不传
+ */
+function getUrlParams(name, urlParam) {
+	var reg = new RegExp("(^|&))" + name + "=([^&]*)(&|$)", "i"); //构造一个含有目标参数的正则表达式对象
+	var r = isEmpty(urlParam) ? window.location.search.substr(1).match(reg) : urlParam.search.substr(1).match(reg); // 匹配目标参数
+	
+	var reg_rewrite = new RegExp("(^|/)" + name + "/[^/]*(/|$)", "i");
+	var q = isEmpty(urlParam) ? window.location.search.substr(1).match(reg_rewrite) : urlParam.search.substr(1).match(reg_rewrite); // 匹配目标参数
+	
+	if(r != null) {
+		return unescape(r[2]);
+	} else if(q != null) {
+		return unescape(q[2])
+	} else {
+		return null;
+	}
+}
 function sendAjaxFun() {
 	
-	$.ajax()
+//	$.ajax()
 }
