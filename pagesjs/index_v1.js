@@ -1,25 +1,6 @@
 
-var methodDatas = [
-		    	{"option": "GET","text": "GET"},
-		    	{"option": "POST","text": "POST"},
-		    	{"option": "PUT","text": "PUT"},
-		    	{"option": "GET","text": "GET"},
-		    	{"option": "PATCH","text": "PATCH"},
-		    	{"option": "DELETE","text": "DELETE"},
-		    	{"option": "COPY","text": "COPY"},
-		    	{"option": "HEAD","text": "HEAD"},
-		    	{"option": "OPTIONS","text": "OPTIONS"},
-		    	{"option": "LINK","text": "LINK"},
-		    	{"option": "ULINK","text": "ULINK"},
-		    	{"option": "PURGE","text": "PURGE"},
-		    	{"option": "LOCK","text": "LOCK"},
-		    	{"option": "UNLOCK","text": "UNLOCK"},
-		    	{"option": "PROPFIND","text": "PROPFIND"},
-		    	{"option": "VIEW","text": "VIEW"}
-			 ];
-
 /**
- * 新增 key--value  的输入框
+ * 新增 key--value  的输入框  params里
  * @param {Object} v
  */
 function createNextDivRowHtmlParams(v) {
@@ -29,7 +10,7 @@ function createNextDivRowHtmlParams(v) {
 	if(inputId == 'params_row_val' || inputId == 'params_row_key') {
 		var rowIndex = $headerVid.index() + 1;
 		var nextDivhtml = ''
-		+'<div class="row" id="params_row_'+ rowIndex +'">'
+		+'<div class="row" id="params_row_'+ rowIndex +'" >'
         +'    <div class="col-sm-4">'
         +'		<div class="m-b">'
         +'        	<input type="text" id="params_row_key_'+ rowIndex +'" placeholder="key" class="form-control" onpropertychange="getDivParams(this)" oninput="getDivParams(this)">'
@@ -52,7 +33,7 @@ function createNextDivRowHtmlParams(v) {
 	// 暂存params 参数
 	var urlParamsPrev = isEmpty($('#url-input').val()) ? "" : $('#url-input').val();
 	
-	if(urlParamsPrev.indexOf("?") > 0) {
+	if(urlParamsPrev.indexOf("?") >= 0) { // -1未匹配
 		urlParamsPrev = urlParamsPrev.substring(urlParamsPrev.indexOf("?") + 1, urlParamsPrev.length);
 		$('#url-input_params').val(urlParamsPrev);
 	} else {
@@ -99,7 +80,7 @@ function createNextDivRowHtml(v) {
 	if(inputId == 'header_row_val' || inputId == 'header_row_key') {
 		var rowIndex = $headerVid.index() + 1;
 		var nextDivhtml = ''
-		+'<div class="row" id="header_row_'+ rowIndex +'">'
+		+'<div class="row" id="header_row_'+ rowIndex +'" >'
         +'    <div class="col-sm-4">'
         +'		<div class="input-group m-b">'
         +'			<span class="input-group-addon" style="padding: 0px 5px 0 1px; border: none;"><i class="fa fa-check-circle"></i></span>'
@@ -148,7 +129,6 @@ function editParam2DivRows(v) {
 		$('#header_content').hide();
 		$('#header_content_params').show();
 	}
-	
 }
 
 /**
@@ -338,22 +318,117 @@ function parseJson(jsonData) {
 				console.log(toKey+'=====直接取key  val======'+jsonData[toKey]);		
 			}
 		}
-	}
+//	});
 }
+	
+//	var setparamsInDiv = $(v).attr('name'); //设置在哪个模块里header/params/.....
+//	var testRegExp = new RegExp('params');
+//	
+//	var textVal = $("#params_key2val").val();
+//	
+//	var arrayVals = [];
+//		arrayVals = textVal.split('\n'); // 以换行未分隔符，将内容分割成数组
+//	
+//	var nextDivhtml = '';
+//	
+//	$.each(jsonData, function(index, val) {
+//		var indexNum = val.indexOf(':');
+//		var rowIndex = index;
+//		var rowKey = val.substr(0, indexNum), rowVal = val.substr(indexNum+1, val.length);
+//		
+//		if(!testRegExp.test(setparamsInDiv)) {
+//			nextDivhtml += ''
+//							+'<div class="row" id="'+ setparamsInDiv +'_row_'+ rowIndex +'">'
+//					        +'    <div class="col-sm-4">'
+//					        +'		<div class="input-group m-b">'
+//					        +'        	<input type="text" id="'+ setparamsInDiv +'_row_key_'+ rowIndex +'" placeholder="key" value="'+rowKey+'" class="form-control" onfocus="createNextDivRowHtml(this)">'
+//					        +'       </div>'
+//					        +'    </div>'
+//					        +'    <div class="col-sm-7">'
+//					        +'		<div class="input-group m-b">'
+//					        +'          <input type="text" id="'+ setparamsInDiv +'_row_val_'+ rowIndex +'" placeholder="value" class="form-control" value="'+rowVal+'" onfocus="createNextDivRowHtml(this)">'
+//					        +'			<span class="input-group-addon" style="border: none;" onclick="moveDivRowHtml(this)"><i class="fa fa-ellipsis-v"></i></span>' // 拖动上下顺序按钮
+//					        +'			<span class="input-group-addon" style="padding: 0px 1px 0 5px; border: none;" onclick="removeDivRowHtml(this)"><i class="fa fa-close"></i></span>'
+//					        +'       </div>'
+//					        +'   </div>'
+//					        +'</div>';
+//		} else {// header
+//			nextDivhtml += ''
+//							+'<div class="row" id="header_row_'+ rowIndex +'">'
+//					        +'    <div class="col-sm-4">'
+//					        +'		<div class="input-group m-b">'
+//					        +'			<span class="input-group-addon" style="padding: 0px 5px 0 1px; border: none;"><i class="fa fa-check-circle"></i></span>'
+//					        +'        	<input type="text" id="header_row_key_'+ rowIndex +'" placeholder="key" value="'+rowKey+'" class="form-control" onfocus="createNextDivRowHtml(this)">'
+//					        +'       </div>'
+//					        +'    </div>'
+//					        +'    <div class="col-sm-8">'
+//					        +'		<div class="input-group m-b">'
+//					        +'          <input type="text" id="header_row_val_'+ rowIndex +'" placeholder="value" class="form-control" value="'+rowVal+'" onfocus="createNextDivRowHtml(this)">'
+//					        +'			<span class="input-group-addon" style="padding: 0px 1px 0 5px; border: none;" onclick="removeDivRowHtml(this)"><i class="fa fa-close"></i></span>'
+//					        +'       </div>'
+//					        +'   </div>'
+//					        +'</div>';
+//		}
+//	});
+//	
+//	// 固定栏目
+//	var headerRow = '<div class="row" id="header_row">'
+//              +'    <div class="col-sm-4">'
+//              +'    	<div class="input-group m-b">'
+//              +'			<span class="input-group-addon" style="padding: 0px 17px 0 1px; border: none;"> </span>'
+//              +'        	<input type="text" id="header_row_key" placeholder="key" class="form-control" onfocus="createNextDivRowHtml(this)">'
+//              +'        </div>'
+//              +'    </div>'
+//              +'    <div class="col-sm-8">'
+//              +'    	<div class="input-group m-b">'
+//              +'            <input type="text" id="header_row_val" placeholder="value" class="form-control" onfocus="createNextDivRowHtml(this)">'
+//              +'        	<span class="input-group-addon" style="padding: 0px 1px 0 5px; border: none; font-size: 11px;" onclick="editParam2DivRows(this)">Builk Edit</span>'
+//              +'    	</div>'
+//              +'    </div>'
+//              +'</div>';
+//	
+//	if(testRegExp.test(setparamsInDiv)) {
+//		$('#'+ setparamsInDiv +'_content').html('').append(nextDivhtml).append(headerRow);
+//	    $('#'+ setparamsInDiv +'_content_params').hide();
+//	    $('#'+ setparamsInDiv +'_content').show();
+//	} else { // header
+//		$('#header_content').html('').append(nextDivhtml).append(headerRow);
+//	    $('#header_content_params').hide();
+//	    $('#header_content').show();
+//	}
+}
+
 /**
  * 初始化方法下拉框
  */
 function initSelectMethod() {
 	var htmlTemp = '';
-	$.each(methodDatas, function(index, val) {
+	$.each(CONSTANT_UTIL.METHODS, function(index, val) {
 		htmlTemp+= '<option value="'+ val.option +'">'+ val.text +'</option>'
 	});
 	$('#method').append(htmlTemp);
 }
+//
+//function keyInputOnkeUp(this) {
+//	var methodTmp = $('#method').val();
+//	 switch (methodTmp){
+//      case "GET":
+//      case "get":
+//          return $('#url-input').val() + 
+//      case "delete":
+//          url = "DELETE";
+//          break;
+//      case "put":
+//          method = "PUT";
+//          break;
+//      default :
+//          break;
+//  }
+//}
 
 function setIntervalTemp(v) {
 	var tempUrl = $(v).val();
-	if(tempUrl.indexOf("?") > 0) {
+	if(tempUrl.indexOf("?") >= 0) {
 		$('#url-input_temp').val(tempUrl.substring(0,url.firstIndexOf("?")));
 	} else {
 		$('#url-input_temp').val(tempUrl);
@@ -382,5 +457,21 @@ function getUrlParams(name, urlParam) {
 }
 function sendAjaxFun() {
 	
-//	$.ajax()
+	$.ajax()
+}
+
+/**
+ * input 输入提示匹配信息数据
+ * @param {Object} id
+ * @param {Object} constantData
+ */
+function initAutocomplete(id, constantData) {
+	 $('#'+id).autocomplete({
+   		minChars: 1,
+  		maxHeight:300, 
+		lookup: constantData,
+   		formatResult: function(data, i, total){ // 结果返回样式
+            return"<i>"+data.value+"</i>";
+          },
+       });
 }

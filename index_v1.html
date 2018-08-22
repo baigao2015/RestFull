@@ -8,14 +8,13 @@
 
     <title>restfull</title>
 
-    <link rel="shortcut icon" href="favicon.ico"> 
-    <link href="css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
+    <link rel="shortcut icon" href="favicon.ico"> <link href="css/bootstrap.min.css?v=3.3.5" rel="stylesheet">
     <link href="css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
 
     <link href="css/animate.min.css" rel="stylesheet">
     <link href="css/style.min.css?v=4.0.0" rel="stylesheet">
-    <link rel="stylesheet" href="js/plugins/jsonFormater/jsonFormater.css" />
-    <!--<link rel="stylesheet" href="js/plugins/select2/select2.min.css" />-->
+    <link rel="stylesheet" href="plugins/jsonFormater-master/jsonFormater.css" />
+    <link rel="stylesheet" href="js/plugins/select2/select2.min.css" />
     <base target="_blank">
 
 </head>
@@ -56,7 +55,7 @@
                        <!-- params start -->
                        <div class="input-group col-sm-12 params_content" id="params_content" style="display: none;">
 	                    	<!--____________     ________________________ ☰ ✘-->
-	                    	<div class="row" id="params_row">
+	                    	<div class="row" id="params_row" >
 		                        <div class="col-sm-4">
 		                        	<div class="m-b">
 			                        	<input type="text" id="params_row_key" placeholder="key" class="form-control" onfocus="createNextDivRowHtmlParams(this)">
@@ -98,43 +97,88 @@
 		                    <div class="tab-content">
 		                        <div id="tab-authorization" class="tab-pane active">
 		                            <div class="panel-body">
-		                            	==================
+		                            	<div class="col-sm-12 clear" style="display: inline-flex;">
+		                            		<div class="col-sm-3">Type：</div>
+											<div class="col-sm-9">
+											    <select class="form-control" name="">
+											        <option>No Auth</option>
+											        <option>Basic Auth</option>
+											        <option>Digest Auth</option>
+											        <option>OAuth 1.0</option>
+											        <option>OAuth 2.0</option>
+											        <option>Hawk Authentication</option>
+											        <option>AWS Signature</option>
+											    </select>
+											</div>
+		                            	</div>
 		                            </div>
 		                        </div>
 		                        <div id="tab-headers" class="tab-pane">
 		                            <div class="panel-body">
-		                               <!-- params start -->
-				                       <div class="input-group col-sm-12 params_content" id="tab_headers_content">
-				                       <div class="row">
-				                       	<div class="form-group">
-				                            <label>标签</label>
-				                            <select id="tags-select" class="select2 form-control" >
-				                            	<option value="1">中国</option>
-				                            	<option value="2">中国2</option>
-				                            	<option value="3">中国3</option>
-				                            </select>
-				                        </div>
-				                       </div>
-					                    	<!--____________     ________________________ ☰ ✘-->
-					                    	<div class="row" id="params_row">
+		                            	<!-- params start -->
+				                       	<div class="input-group col-sm-12 params_content" id="header_content">
+					                    	<!--✔____________     ________________________ ✘-->
+					                    	<div class="row" id="header_row" >
 						                        <div class="col-sm-4">
-						                        	<div class="m-b">
-							                        	<input type="text" id="tab_headers_row_key" placeholder="key" class="form-control" onfocus="createNextDivRowHtmlParams(this)">
-						                        	</div>
-						                        </div>
-						                        <div class="col-sm-7">
 						                        	<div class="input-group m-b">
-							                            <input type="text" id="tab_header_row_val" placeholder="value" class="form-control" onfocus="createNextDivRowHtmlParams(this)">
-							                        	<span class="input-group-addon" style="padding: 0px 1px 0 5px; border: none; font-size: 11px;" name="params" onclick="editParam2DivRows(this)">Builk Edit</span>
+						                    			<span class="input-group-addon" style="padding: 0px 17px 0 1px; border: none;"> </span>
+							                        	<input type="text" id="header_row_key" placeholder="key" class="form-control" onfocus="createNextDivRowHtml(this)">
+							                        </div>
+						                        </div>
+						                        <div class="col-sm-8">
+						                        	<div class="input-group m-b">
+							                            <input type="text" id="header_row_val" placeholder="value" class="form-control" onfocus="createNextDivRowHtml(this)">
+							                        	<span class="input-group-addon" style="padding: 0px 1px 0 5px; border: none; font-size: 11px;" onclick="editParam2DivRows(this)">Builk Edit</span>
 						                        	</div>
 						                        </div>
 					                        </div>
 					                    </div><!-- params end -->
+					                    
+					                    <div class="input-group col-sm-12 params_content" id="header_content_params" style="display: none;">
+					                    	<div class="input-group col-sm-12">
+					                    	<div class="row form-group" id="header_row_params">
+						                        <div class="col-sm-12">
+						                        	<textarea id="params_key2val" rows="5" name="comment" class="form-control"></textarea>
+						                        </div>
+					                        </div>
+					                        <div class="form-group">
+					                            <div class="col-sm-8 col-sm-offset-3">
+					                            	<button class="btn btn-primary" type="button" name="header" onclick="setParams2Html(this)">提交</button>
+					                                <button class="btn btn-white" type="button" onclick="cancelParams(this)">取消</button>
+					                            </div>
+					                        </div>
+					                    </div>
+					                    </div>
 		                            </div>
 		                        </div>
 		                        <div id="tab-body" class="tab-pane">
 		                            <div class="panel-body">
-		                                <strong>tab-body移动设备优先</strong>
+										<div class="col-sm-10 row body-radio">
+										    <label class="radio-inline">
+										        <input type="radio" checked="" value="option1" id="optionsRadios1" name="optionsRadios" style="margin-top: 2px;">form-data</label>
+										    <label class="radio-inline">
+										        <input type="radio" value="option2" id="optionsRadios2" name="optionsRadios" style="margin-top: 2px;">x-www-form-urlencoded</label>
+										        <label class="radio-inline">
+										        <input type="radio" value="option3" id="optionsRadios3" name="optionsRadios" style="margin-top: 2px;">raw</label>
+										        <label class="radio-inline">
+										        <input type="radio" value="option4" id="optionsRadios4" name="optionsRadios" style="margin-top: 2px;">binary</label>
+										</div>
+										<div class="hr-line-dashed" style="margin: 30px 0 5px;background-color: #e7eaec;"></div>
+										<!--____________     ________________________ ☰ ✘-->
+				                    	<div class="row" id="body_params_row" >
+					                        <div class="col-sm-4">
+					                        	<div class="m-b">
+						                        	<input type="text" id="body_params_row_key" placeholder="key" class="form-control" onfocus="createNextDivRowHtmlParams(this)">
+					                        
+					                        	</div>
+					                        </div>
+					                        <div class="col-sm-7">
+					                        	<div class="input-group m-b">
+						                            <input type="text" id="body_params_row_val" placeholder="value" class="form-control" onfocus="createNextDivRowHtmlParams(this)">
+						                        	<span class="input-group-addon" style="padding: 0px 1px 0 5px; border: none; font-size: 11px;" name="params" onclick="editParam2DivRows(this)">Builk Edit</span>
+					                        	</div>
+					                        </div>
+				                        </div>
 		                            </div>
 		                        </div>
 		                    </div>
@@ -142,10 +186,9 @@
                     </div>
                     <div class="hr-line-dashed"></div>
                     
-                    <div class="ibox-content clear header_content" id="header_content">
+                    <!--<div class="ibox-content clear header_content" id="header_content">
                                     
-                    	<!--✔____________     ________________________ ✘-->
-                    	<div class="row" id="header_row">
+                    	<div class="row" id="header_row" >
 	                        <div class="col-sm-4">
 	                        	<div class="input-group m-b">
 	                    			<span class="input-group-addon" style="padding: 0px 17px 0 1px; border: none;"> </span>
@@ -159,7 +202,7 @@
 	                        	</div>
 	                        </div>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="ibox-content" id="header_content_params" style="display: none;">
                     	<div class="input-group col-sm-12">
                     	<div class="row form-group" id="header_row_params">
@@ -197,12 +240,25 @@
     <script src="js/bootstrap.min.js?v=3.3.5"></script>
     <!--<script src="js/plugins/layer/layer.min.js"></script>-->
     <script src="js/content.min.js"></script>
-    <!--<script src="plugins/jsl.format.js"></script>-->
-    <script src="js/plugins/jsonFormater/jsonFormater.js"></script>
+    <script src="plugins/jsl.format.js"></script>
+    <script src="plugins/jsonFormater-master/jsonFormater.js"></script>
     <!--<script src="js/welcome.min.js"></script>-->
-    <!--<script type="text/javascript" src="js/plugins/select2/select2.min.js"></script>-->
+    <script type="text/javascript" src="js/plugins/select2/select2.min.js"></script>
+    <!--
+    	作者：2307187356@qq.com
+    	时间：2018-08-16
+    	描述：输入提示
+    -->
+    <script src="pagesjs/jquery.autocomplete.js"></script>
+    <!--
+    	作者：2307187356@qq.com
+    	时间：2018-08-16
+    	描述：常量
+    -->
+    <script src="pagesjs/constant-util.js"></script>
     <script type="text/javascript" src="pagesjs/comment-util.js" ></script>
     <script src="pagesjs/index_v1.js"></script>
+    
     <script>
     	$(function() {
 			$('#send_form_btn').click(function() {
@@ -225,12 +281,12 @@
 			initSelectMethod();
 			
 			//select2初始化
-            /*$(".select2").select2({
+            $(".select2").select2({
 //              tags: true,
 //              tokenSeparators: [',', ' '],
                 placeholder:"输入标签",
 //              data:data
-            });*/
+            });
 		});
     </script>
 </body>
